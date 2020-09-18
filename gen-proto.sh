@@ -2,25 +2,25 @@
 # cd $GOPATH/src/github.com/tronprotocol/grpc-gateway/protocol
 
 # Generate gRPC stub
-protoc -I=./protocol \
+protoc -I=./protocol -I=/usr/include \
     -I$GOPATH/src/github.com/tronprotocol/grpc-gateway/third_party/googleapis \
     --go_out=plugins=grpc:../../../ \
     ./protocol/core/contract/*.proto
 
-protoc -I=./protocol \
+protoc -I=./protocol -I=/usr/include \
     -I$GOPATH/src/github.com/tronprotocol/grpc-gateway/third_party/googleapis \
     --go_out=plugins=grpc:../../../ \
     ./protocol/core/*.proto
 
 
-protoc -I=./protocol \
+protoc -I=./protocol -I=/usr/include \
     -I$GOPATH/src/github.com/tronprotocol/grpc-gateway/third_party/googleapis \
     --go_out=plugins=grpc:../../../ \
     ./protocol/api/*.proto
 
 
 # Generate reverse-proxy
-protoc -I=./protocol \
+protoc -I=./protocol -I=/usr/include \
     -I$GOPATH/src/github.com/tronprotocol/grpc-gateway/third_party/googleapis \
     --grpc-gateway_out=logtostderr=true:../../../ \
     ./protocol/api/*.proto
