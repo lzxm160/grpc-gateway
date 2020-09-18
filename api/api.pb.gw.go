@@ -259,7 +259,7 @@ func request_Wallet_BroadcastTransaction_0(ctx context.Context, marshaler runtim
 		fmt.Println("IOReaderFactory", berr)
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-	err := jsonpb.Unmarshal(newReader, &protoReq)
+	err := jsonpb.Unmarshal(newReader(), &protoReq)
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
