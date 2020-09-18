@@ -14,6 +14,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/gogo/protobuf/jsonpb"
 	"github.com/golang/protobuf/descriptor"
 	"github.com/golang/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -258,10 +259,14 @@ func request_Wallet_BroadcastTransaction_0(ctx context.Context, marshaler runtim
 		fmt.Println("IOReaderFactory", berr)
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
-	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
-		fmt.Println("marshaler.NewDecoder(newReader()).Decode(&protoReq)", err)
+	err := jsonpb.Unmarshal(newReader, &protoReq)
+	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
+	//if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
+	//	fmt.Println("marshaler.NewDecoder(newReader()).Decode(&protoReq)", err)
+	//	return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	//}
 
 	msg, err := client.BroadcastTransaction(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
