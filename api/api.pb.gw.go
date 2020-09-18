@@ -256,6 +256,7 @@ func request_Wallet_BroadcastTransaction_0(ctx context.Context, marshaler runtim
 	fmt.Printf(newStr)
 	newReader, berr := utilities.IOReaderFactory(req.Body)
 	if berr != nil {
+		fmt.Println("IOReaderFactory", berr)
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
 	}
 	if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
