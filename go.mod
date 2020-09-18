@@ -9,7 +9,8 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway v1.3.1-0.20180409015433-3189c0c0c638
 	github.com/rogpeppe/fastuuid v0.0.0-20150106093220-6724a57986af
 	golang.org/x/net v0.0.0-20180406214816-61147c48b25b
-	golang.org/x/text v0.3.1-0.20180410181320-7922cc490dd5
+	golang.org/x/sync v0.0.0-20200625203802-6e8e738ad208 // indirect
+	golang.org/x/text v0.3.1-0.20180410181320-7922cc490dd5 // indirect
 	google.golang.org/genproto v0.0.0-20180409222037-51d0944304c3
 	google.golang.org/grpc v1.2.1-0.20180411171206-db0f0713e3a7
 )
