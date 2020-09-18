@@ -2,18 +2,16 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
 
 	"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	gw "github.com/tronprotocol/grpc-gateway/api"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-
-	gw "github.com/tronprotocol/grpc-gateway/api"
-
-	"fmt"
 )
 
 var (
