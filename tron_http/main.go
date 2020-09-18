@@ -19,7 +19,7 @@ import (
 var (
 	port   = flag.Int("port", 50051, "port of your tron grpc service")
 	host   = flag.String("host", "grpc.trongrid.io", "host of your tron grpc service")
-	listen = flag.Int("listen", 18890, "the port that http server listen")
+	listen = flag.Int("listen", 18080, "the port that http server listen")
 )
 
 func allowCORS(h http.Handler) http.Handler {
