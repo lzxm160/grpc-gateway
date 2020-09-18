@@ -1,11 +1,11 @@
 package main
 
-
 import (
 	"flag"
 	"net/http"
 	"strconv"
 	"strings"
+
 	"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"golang.org/x/net/context"
@@ -17,10 +17,9 @@ import (
 )
 
 var (
-	port = flag.Int("port",50051, "port of your tron grpc service" )
-	host = flag.String("host", "localhost", "host of your tron grpc service")
+	port   = flag.Int("port", 50051, "port of your tron grpc service")
+	host   = flag.String("host", "grpc.trongrid.io", "host of your tron grpc service")
 	listen = flag.Int("listen", 18890, "the port that http server listen")
-
 )
 
 func allowCORS(h http.Handler) http.Handler {
@@ -37,12 +36,12 @@ func allowCORS(h http.Handler) http.Handler {
 }
 
 func preflightHandler(w http.ResponseWriter, r *http.Request) {
-	headers := []string{"Content-Type", "Accept","X-Requested-With","token"}
+	headers := []string{"Content-Type", "Accept", "X-Requested-With", "token"}
 	w.Header().Set("Access-Control-Allow-Headers", strings.Join(headers, ","))
-	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE","TRACE","OPTIONS","PATCH"}
+	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE", "TRACE", "OPTIONS", "PATCH"}
 	w.Header().Set("Access-Control-Allow-Methods", strings.Join(methods, ","))
-	orgin:=[]string{"*"}
-	w.Header().Set("Access-Control-Allow-Origin", strings.Join(orgin, ","));
+	orgin := []string{"*"}
+	w.Header().Set("Access-Control-Allow-Origin", strings.Join(orgin, ","))
 	glog.Infof("preflight request for %s", r.URL.Path)
 	return
 }
@@ -53,9 +52,8 @@ func run() error {
 	defer cancel()
 
 	mux := runtime.NewServeMux()
-	grpcEndpoint := *host + ":"  + strconv.Itoa(*port)
+	grpcEndpoint := *host + ":" + strconv.Itoa(*port)
 	opts := []grpc.DialOption{grpc.WithInsecure()}
-
 
 	fmt.Printf("grpc server:  %s\n", grpcEndpoint)
 	fmt.Printf("http port  :  %d\n", *listen)
@@ -75,7 +73,7 @@ func run() error {
 		return err
 	}
 
-	return http.ListenAndServe(":" + strconv.Itoa(*listen), allowCORS(mux))
+	return http.ListenAndServe(":"+strconv.Itoa(*listen), allowCORS(mux))
 }
 
 func main() {
