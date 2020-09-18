@@ -15,7 +15,7 @@ import (
 	"net/http"
 
 	"github.com/golang/protobuf/descriptor"
-	"github.com/gogo/protobuf"
+	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/utilities"
