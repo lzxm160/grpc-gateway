@@ -1,2 +1,2 @@
-go build tron_http -o server
+go build  -o server ./tron_http
 ./server
