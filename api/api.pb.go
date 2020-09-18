@@ -8,7 +8,6 @@ package api
 
 import (
 	context "context"
-	"fmt"
 	reflect "reflect"
 	sync "sync"
 
@@ -10308,7 +10307,6 @@ func _Wallet_CreateTransaction2_Handler(srv interface{}, ctx context.Context, de
 }
 
 func _Wallet_BroadcastTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	fmt.Println("_Wallet_BroadcastTransaction_Handler")
 	in := new(core.Transaction)
 	if err := dec(in); err != nil {
 		return nil, err

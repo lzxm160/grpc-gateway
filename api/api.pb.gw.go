@@ -4058,8 +4058,6 @@ func RegisterWalletHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 	})
 
 	mux.Handle("POST", pattern_Wallet_BroadcastTransaction_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
-		fmt.Println("pattern_Wallet_BroadcastTransaction_0")
-		fmt.Println("post pattern_Wallet_BroadcastTransaction_0", req.Proto)
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
@@ -6818,15 +6816,18 @@ func RegisterWalletHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 		fmt.Println("api.pb.gw.go attern_Wallet_BroadcastTransaction_0")
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
+		fmt.Println(req.Proto)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		rctx, err := runtime.AnnotateContext(ctx, mux, req)
 		if err != nil {
+			fmt.Println("AnnotateContext", err)
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 		resp, md, err := request_Wallet_BroadcastTransaction_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
+			fmt.Println("request_Wallet_BroadcastTransaction_0", err)
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
