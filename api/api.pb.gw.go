@@ -6815,6 +6815,7 @@ func RegisterWalletHandlerClient(ctx context.Context, mux *runtime.ServeMux, cli
 	})
 
 	mux.Handle("POST", pattern_Wallet_BroadcastTransaction_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		fmt.Println("api.pb.gw.go attern_Wallet_BroadcastTransaction_0")
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
