@@ -8,6 +8,10 @@ package api
 
 import (
 	context "context"
+	"fmt"
+	reflect "reflect"
+	sync "sync"
+
 	proto "github.com/golang/protobuf/proto"
 	core "github.com/tronprotocol/grpc-gateway/core"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
@@ -16,8 +20,6 @@ import (
 	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	reflect "reflect"
-	sync "sync"
 )
 
 const (
@@ -10306,6 +10308,7 @@ func _Wallet_CreateTransaction2_Handler(srv interface{}, ctx context.Context, de
 }
 
 func _Wallet_BroadcastTransaction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	fmt.Println("_Wallet_BroadcastTransaction_Handler")
 	in := new(core.Transaction)
 	if err := dec(in); err != nil {
 		return nil, err
