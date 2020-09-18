@@ -9,6 +9,7 @@ It translates gRPC into RESTful JSON APIs.
 package api
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -248,7 +249,11 @@ func local_request_Wallet_CreateTransaction_1(ctx context.Context, marshaler run
 func request_Wallet_BroadcastTransaction_0(ctx context.Context, marshaler runtime.Marshaler, client WalletClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq core.Transaction
 	var metadata runtime.ServerMetadata
+	buf := new(bytes.Buffer)
+	buf.ReadFrom(req.Body)
+	newStr := buf.String()
 
+	fmt.Printf(newStr)
 	newReader, berr := utilities.IOReaderFactory(req.Body)
 	if berr != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", berr)
