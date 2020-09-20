@@ -4044,6 +4044,7 @@ func RegisterWalletHandlerServer(ctx context.Context, mux *runtime.ServeMux, ser
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
+		fmt.Println("pattern_Wallet_CreateTransaction_0", resp.String())
 
 		forward_Wallet_CreateTransaction_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
