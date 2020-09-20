@@ -256,7 +256,7 @@ func request_Wallet_BroadcastTransaction_0(ctx context.Context, marshaler runtim
 	buf.ReadFrom(req.Body)
 	newStr := buf.String()
 
-	fmt.Printf(newStr)
+	fmt.Printf("request_Wallet_BroadcastTransaction_0", newStr)
 	//newReader, berr := utilities.IOReaderFactory(req.Body)
 	//if berr != nil {
 	//	fmt.Println("IOReaderFactory", berr)
