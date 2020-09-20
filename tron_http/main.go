@@ -1,11 +1,14 @@
 package main
 
 import (
+	"crypto/tls"
 	"flag"
 	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"google.golang.org/grpc/credentials"
 
 	"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -16,8 +19,9 @@ import (
 
 var (
 	port = flag.Int("port", 50051, "port of your tron grpc service")
-	host = flag.String("host", "grpc.trongrid.io", "host of your tron grpc service")
-	//host   = flag.String("host", "114.215.173.70", "host of your tron grpc service")
+	//host = flag.String("host", "grpc.trongrid.io", "host of your tron grpc service")
+	host   = flag.String("host", "114.215.173.70", "host of your tron grpc service")
+	secure = flag.Bool("secure", true, "grpc to tron node")
 	listen = flag.Int("listen", 38080, "the port that http server listen")
 )
 
@@ -52,8 +56,13 @@ func run() error {
 
 	mux := runtime.NewServeMux()
 	grpcEndpoint := *host + ":" + strconv.Itoa(*port)
-	opts := []grpc.DialOption{grpc.WithInsecure()}
-
+	//opts := []grpc.DialOption{grpc.WithInsecure()}
+	opts := []grpc.DialOption{}
+	if *secure {
+		opts = append(opts, grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{})))
+	} else {
+		opts = append(opts, grpc.WithInsecure())
+	}
 	fmt.Printf("grpc server:  %s\n", grpcEndpoint)
 	fmt.Printf("http port  :  %d\n", *listen)
 

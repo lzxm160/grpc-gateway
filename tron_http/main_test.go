@@ -62,8 +62,8 @@ func TestMarshal(t *testing.T) {
 func TestRest(t *testing.T) {
 	require := require.New(t)
 	{
-		contractBalanceOf(t, wbbcontract, account1)
-		contractBalanceOf(t, wbbcontract, wbbcontract)
+		//contractBalanceOf(t, wbbcontract, account1)
+		//contractBalanceOf(t, wbbcontract, wbbcontract)
 	}
 	addr1, err := address.Base58ToAddress(account1)
 	require.NoError(err)
@@ -89,9 +89,9 @@ func TestRest(t *testing.T) {
 			SetBody(marshaled).
 			//SetResult(&AuthSuccess{}). // or SetResult(AuthSuccess{}).
 			Post("http://192.168.59.128:38080/wallet/createtransaction")
-		fmt.Println("here", resp, err)
+		fmt.Println("here", resp.String(), err)
 		res = resp.Body()
-		fmt.Println("body", res)
+		fmt.Println("body", string(res))
 	}
 	//	tran := &Transaction{}
 	//
