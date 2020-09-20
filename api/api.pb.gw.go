@@ -256,7 +256,7 @@ func request_Wallet_BroadcastTransaction_0(ctx context.Context, marshaler runtim
 	buf.ReadFrom(req.Body)
 	newStr := buf.String()
 
-	fmt.Printf("request_Wallet_BroadcastTransaction_0", newStr)
+	fmt.Printf("request_Wallet_BroadcastTransaction_0:", newStr)
 	//newReader, berr := utilities.IOReaderFactory(req.Body)
 	//if berr != nil {
 	//	fmt.Println("IOReaderFactory", berr)
@@ -264,6 +264,7 @@ func request_Wallet_BroadcastTransaction_0(ctx context.Context, marshaler runtim
 	//}
 	err := jsonpb.Unmarshal(ioutil.NopCloser(strings.NewReader(newStr)), &protoReq)
 	if err != nil {
+		fmt.Println("unmarshal", err)
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 	//if err := marshaler.NewDecoder(newReader()).Decode(&protoReq); err != nil && err != io.EOF {
