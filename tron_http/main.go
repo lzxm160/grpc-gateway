@@ -16,8 +16,8 @@ import (
 
 var (
 	port = flag.Int("port", 50051, "port of your tron grpc service")
-	host = flag.String("host", "grpc.trongrid.io", "host of your tron grpc service")
-
+	//host = flag.String("host", "grpc.trongrid.io", "host of your tron grpc service")
+	host   = flag.String("host", "114.215.173.70", "host of your tron grpc service")
 	listen = flag.Int("listen", 38080, "the port that http server listen")
 )
 
