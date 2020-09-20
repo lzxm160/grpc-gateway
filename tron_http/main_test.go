@@ -2,16 +2,18 @@ package main
 
 import (
 	"fmt"
+
 	"math/big"
 	"strings"
 	"testing"
 
-	"github.com/tronprotocol/grpc-gateway/tron"
-
+	"github.com/fbsobreira/gotron-sdk/pkg/address"
 	"github.com/fbsobreira/gotron-sdk/pkg/proto/core"
+	resty "github.com/go-resty/resty/v2"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/i9/bar"
 	"github.com/stretchr/testify/require"
+	"github.com/tronprotocol/grpc-gateway/tron"
 )
 
 const (
@@ -57,70 +59,74 @@ func TestMarshal(t *testing.T) {
 	fmt.Println(m.MarshalToString(tt))
 }
 
-//func TestRest(t *testing.T) {
-//	require := require.New(t)
-//	{
-//		contractBalanceOf(t, wbbcontract, account1)
-//		contractBalanceOf(t, wbbcontract, wbbcontract)
-//	}
-//	tt := &tron.Call_Contract{
-//		Caller:   "TXVeaD62HJ2Gfk4NYATrsW1e5mt77jBaMq",
-//		Contract: "TFcgBNqQPqX4fXbkZtKe7gBPZhtZddzpkC",
-//		Method:   "transfer(address,uint256)",
-//		Params:   `[{"address":"TFcgBNqQPqX4fXbkZtKe7gBPZhtZddzpkC"},{"uint256":"10"}]`,
-//	}
-//	xx, err := json.Marshal(tt)
-//	require.NoError(err)
-//	fmt.Println(string(xx))
-//	var res []byte
-//	{
-//		client := resty.New()
-//
-//		// POST JSON string
-//		// No need to set content type, if you have client level setting
-//		resp, err := client.R().
-//			SetHeader("Content-Type", "application/json").
-//			SetBody(string(xx)).
-//			//SetResult(&AuthSuccess{}). // or SetResult(AuthSuccess{}).
-//			Post("http://192.168.59.128:38080/wallet/callcontract")
-//		fmt.Println("here", resp, err)
-//		res = resp.Body()
-//		fmt.Println("body", res)
-//	}
-//	tran := &Transaction{}
-//
-//	{
-//		//sign and broadcast
-//		require.NoError(json.Unmarshal(res, tran))
-//		rawData, err := json.Marshal(tran.RawData)
-//		require.NoError(err)
-//		h256h := sha256.New()
-//		h256h.Write(rawData)
-//		hash := h256h.Sum(nil)
-//		pri, err := crypto.HexToECDSA(privateKey1)
-//		require.NoError(err)
-//		signature, err := crypto.Sign(hash, pri)
-//		require.NoError(err)
-//		tran.Signature = append(tran.Signature, signature)
-//	}
-//
-//	{
-//		xx, err := json.Marshal(tran)
-//		require.NoError(err)
-//		fmt.Println(string(xx))
-//		client := resty.New()
-//
-//		resp, err := client.R().
-//			SetHeader("Content-Type", "application/json").
-//			SetBody(string(xx)).
-//			Post("http://192.168.59.128:38080/wallet/broadcasttransaction")
-//		fmt.Println(resp, err)
-//	}
-//	{
-//		contractBalanceOf(t, wbbcontract, account1)
-//		contractBalanceOf(t, wbbcontract, wbbcontract)
-//	}
-//}
+func TestRest(t *testing.T) {
+	require := require.New(t)
+	{
+		contractBalanceOf(t, wbbcontract, account1)
+		contractBalanceOf(t, wbbcontract, wbbcontract)
+	}
+	addr1, err := address.Base58ToAddress(account1)
+	require.NoError(err)
+	addr2, err := address.Base58ToAddress(wbbcontract)
+	require.NoError(err)
+	tx := &core.TransferContract{
+		OwnerAddress: addr1.Bytes(),
+		ToAddress:    addr2.Bytes(),
+		Amount:       10,
+	}
+	m := &jsonpb.Marshaler{AnyResolver: bar.BetterAnyResolver}
+	marshaled, err := m.MarshalToString(tx)
+	fmt.Println(marshaled, err)
+
+	var res []byte
+	{
+		client := resty.New()
+
+		// POST JSON string
+		// No need to set content type, if you have client level setting
+		resp, err := client.R().
+			SetHeader("Content-Type", "application/json").
+			SetBody(marshaled).
+			//SetResult(&AuthSuccess{}). // or SetResult(AuthSuccess{}).
+			Post("http://192.168.59.128:38080/wallet/createtransaction")
+		fmt.Println("here", resp, err)
+		res = resp.Body()
+		fmt.Println("body", res)
+	}
+	//	tran := &Transaction{}
+	//
+	//	{
+	//		//sign and broadcast
+	//		require.NoError(json.Unmarshal(res, tran))
+	//		rawData, err := json.Marshal(tran.RawData)
+	//		require.NoError(err)
+	//		h256h := sha256.New()
+	//		h256h.Write(rawData)
+	//		hash := h256h.Sum(nil)
+	//		pri, err := crypto.HexToECDSA(privateKey1)
+	//		require.NoError(err)
+	//		signature, err := crypto.Sign(hash, pri)
+	//		require.NoError(err)
+	//		tran.Signature = append(tran.Signature, signature)
+	//	}
+	//
+	//	{
+	//		xx, err := json.Marshal(tran)
+	//		require.NoError(err)
+	//		fmt.Println(string(xx))
+	//		client := resty.New()
+	//
+	//		resp, err := client.R().
+	//			SetHeader("Content-Type", "application/json").
+	//			SetBody(string(xx)).
+	//			Post("http://192.168.59.128:38080/wallet/broadcasttransaction")
+	//		fmt.Println(resp, err)
+	//	}
+	//	{
+	//		contractBalanceOf(t, wbbcontract, account1)
+	//		contractBalanceOf(t, wbbcontract, wbbcontract)
+	//	}
+}
 
 func contractBalanceOf(t *testing.T, contract, add string) {
 	require := require.New(t)
