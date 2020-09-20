@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/big"
 	"strings"
 	"testing"
 
@@ -54,4 +55,81 @@ func TestMarshal(t *testing.T) {
 	//err:=m.MarshalToString(tt)
 	//require.NoError(err)
 	fmt.Println(m.MarshalToString(tt))
+}
+
+//func TestRest(t *testing.T) {
+//	require := require.New(t)
+//	{
+//		contractBalanceOf(t, wbbcontract, account1)
+//		contractBalanceOf(t, wbbcontract, wbbcontract)
+//	}
+//	tt := &tron.Call_Contract{
+//		Caller:   "TXVeaD62HJ2Gfk4NYATrsW1e5mt77jBaMq",
+//		Contract: "TFcgBNqQPqX4fXbkZtKe7gBPZhtZddzpkC",
+//		Method:   "transfer(address,uint256)",
+//		Params:   `[{"address":"TFcgBNqQPqX4fXbkZtKe7gBPZhtZddzpkC"},{"uint256":"10"}]`,
+//	}
+//	xx, err := json.Marshal(tt)
+//	require.NoError(err)
+//	fmt.Println(string(xx))
+//	var res []byte
+//	{
+//		client := resty.New()
+//
+//		// POST JSON string
+//		// No need to set content type, if you have client level setting
+//		resp, err := client.R().
+//			SetHeader("Content-Type", "application/json").
+//			SetBody(string(xx)).
+//			//SetResult(&AuthSuccess{}). // or SetResult(AuthSuccess{}).
+//			Post("http://192.168.59.128:38080/wallet/callcontract")
+//		fmt.Println("here", resp, err)
+//		res = resp.Body()
+//		fmt.Println("body", res)
+//	}
+//	tran := &Transaction{}
+//
+//	{
+//		//sign and broadcast
+//		require.NoError(json.Unmarshal(res, tran))
+//		rawData, err := json.Marshal(tran.RawData)
+//		require.NoError(err)
+//		h256h := sha256.New()
+//		h256h.Write(rawData)
+//		hash := h256h.Sum(nil)
+//		pri, err := crypto.HexToECDSA(privateKey1)
+//		require.NoError(err)
+//		signature, err := crypto.Sign(hash, pri)
+//		require.NoError(err)
+//		tran.Signature = append(tran.Signature, signature)
+//	}
+//
+//	{
+//		xx, err := json.Marshal(tran)
+//		require.NoError(err)
+//		fmt.Println(string(xx))
+//		client := resty.New()
+//
+//		resp, err := client.R().
+//			SetHeader("Content-Type", "application/json").
+//			SetBody(string(xx)).
+//			Post("http://192.168.59.128:38080/wallet/broadcasttransaction")
+//		fmt.Println(resp, err)
+//	}
+//	{
+//		contractBalanceOf(t, wbbcontract, account1)
+//		contractBalanceOf(t, wbbcontract, wbbcontract)
+//	}
+//}
+
+func contractBalanceOf(t *testing.T, contract, add string) {
+	require := require.New(t)
+	rc, err := tron.NewReadContractCaller(url)
+	require.NoError(err)
+	param := `[{"address":"` + add + `"}]`
+	result, err := rc.ReadContract(contract, "balanceOf(address)", param, 10)
+	require.NoError(err)
+	for _, i := range result {
+		fmt.Println(big.NewInt(0).SetBytes(i))
+	}
 }
